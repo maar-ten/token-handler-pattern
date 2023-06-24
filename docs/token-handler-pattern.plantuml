@@ -1,0 +1,77 @@
+@startuml
+!pragma teoz true
+
+title Token Handler Pattern
+
+box "monoliet"
+  participant "donna pti" as pti
+  participant browser as brw
+end box
+box openshift
+  box "token handler" #lightblue
+    participant nginx as nx
+    participant redis as rds
+  end box
+  participant "backend\nfor frontend" as bff
+  participant backend as be
+  participant keycloak as key
+end box
+
+activate pti
+    pti -> key: login
+    activate key
+        key -> pti: token
+    deactivate key
+
+== request with token ==
+
+pti -> brw: token
+activate brw
+    brw -> nx: api req + token
+    activate nx
+        nx -> nx: session
+        nx -> rds: session + token
+        activate rds
+            rds -> nx: token stored
+        deactivate rds
+        nx -> bff: api req + token
+        activate bff
+            bff -> be: api req + token
+            activate be
+                be -> key: token validation
+                activate key
+                    key -> be: success
+                deactivate key
+                be -> bff: response
+            deactivate be
+            bff -> nx: response
+        deactivate bff
+        nx -> brw: response + cookie
+        deactivate nx
+    brw -> pti: render
+
+== request with cookie ==
+
+brw -> nx: api req + cookie
+activate nx
+    nx -> rds: session
+    activate rds
+        rds -> nx: token
+    deactivate rds
+    nx -> bff: api req + token
+    activate bff
+        bff -> be: api req + token
+        activate be
+            be -> key: token validation
+            activate key
+                key -> be: success
+            deactivate key
+            be -> bff: response
+        deactivate be
+        bff -> nx: response
+    deactivate bff
+    nx -> brw: response + cookie
+deactivate nx
+brw -> pti: render
+
+@enduml

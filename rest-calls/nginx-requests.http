@@ -1,0 +1,7 @@
+### request to store token in redis
+GET localhost:8080/set
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+### request to retrieve token from redis
+GET localhost:8080/get
+Cookie: redis_key=f3967b99dea1fd79fbe36de971f037c; HttpOnly

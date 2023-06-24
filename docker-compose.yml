@@ -1,0 +1,30 @@
+# Start nginx and redis inside a local docker network
+
+networks:
+  token-cache:
+    external: false
+
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 8080:80
+    networks: [token-cache]
+    volumes:
+      # mount the nginx.conf in this project to the image
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      # mount the folder with js-files in this project to the image
+      - ./njs:/etc/nginx/njs/:ro
+      # mount the folder with extra modules in the project to the image
+      - ./modules:/etc/nginx/dyn_modules/:ro
+
+  redis:
+    image: redis/redis-stack:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+      # exposes redis insight
+      - 8001:8001
+    networks: [token-cache]
+
