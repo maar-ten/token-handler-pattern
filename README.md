@@ -46,7 +46,9 @@ There is an [njs example repository](https://github.com/nginx/njs-examples)
 # Compile dynamic module for redis
 
 nginx does not come with redis support built-in. There is a 3rd party dynamic module for that, which you
-have to compile yourself. The binary is included in the project files: `/modules/ngx_http_redis2_module.so`
+have to compile yourself. The binary is included in the project files: `/modules/ngx_http_redis2_module.so`.
+It was build with nginx version [1.25.1](http://nginx.org/download/nginx-1.25.1.tar.gz) 
+and redis2redis2-nginx-module version [v0.15](https://github.com/openresty/redis2-nginx-module/archive/refs/tags/v0.15.tar.gz)
 
 Background information: https://www.nginx.com/blog/compiling-dynamic-modules-nginx-plus/#build-module
 
