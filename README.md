@@ -4,6 +4,7 @@ Token handler pattern using nginx and redis
 This is a proof of concept for the token handler pattern using nginx, javascript and redis.
 Background information can be found on:
 
+https://curity.io/resources/learn/the-token-handler-pattern
 
 # Project structure
 
