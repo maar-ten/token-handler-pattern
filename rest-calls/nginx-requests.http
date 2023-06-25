@@ -4,4 +4,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 ### request to retrieve token from redis
 GET localhost:8080/get
-Cookie: redis_key=f3967b99dea1fd79fbe36de971f037c; HttpOnly
+Cookie: redis_key=31ebad2db8baa78f18e9bace9c75ba; HttpOnly

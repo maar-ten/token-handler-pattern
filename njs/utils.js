@@ -11,18 +11,17 @@ function randomString() {
   return array.reduce((acc, cur) => acc += cur.toString(16), '')
 }
 
-function hasToken(request) {
-  if (request.headersIn.Authorization) {
-    request.return(200);
-    return;
-  }
-
-  request.return(401);
-}
-
 function parseToken(request) {
   // remove 'BEARER ' from authorization header
   return request.headersIn.Authorization.slice(7);
+}
+
+function validateRequestHeaders(request) {
+  if (hasToken(request) || hasCookie(request)) {
+    return request.return(200);
+  }
+
+  return request.return(401);
 }
 
 // cookie header form is: "redis-key=abc; HttpOnly; Secure"
@@ -36,5 +35,14 @@ function getRedisCookieValue(request) {
   return redisCookie ? redisCookie[1].trim() : undefined;
 }
 
-export default {REDIS_KEY, randomString, hasToken, parseToken, getRedisCookieValue}
+function hasToken(request) {
+  return request.headersIn.Authorization !== undefined;
+}
+
+function hasCookie(request) {
+  const cookie = request.headersIn.Cookie;
+  return cookie !== undefined && cookie.includes(REDIS_KEY);
+}
+
+export default {REDIS_KEY, randomString, parseToken, validateRequestHeaders, getRedisCookieValue};
 
