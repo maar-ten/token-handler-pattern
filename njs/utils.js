@@ -8,7 +8,7 @@ function randomString() {
   const array = new Uint32Array(4);
   crypto.getRandomValues(array);
 
-  return array.reduce((acc, cur) => acc += cur.toString(16), '')
+  return array.reduce((acc, cur) => acc += cur.toString(16), '');
 }
 
 function parseToken(request) {
@@ -21,7 +21,7 @@ function validateRequestHeaders(request) {
     return request.return(200);
   }
 
-  return request.return(401);
+  request.return(401);
 }
 
 // cookie header form is: "redis-key=abc; HttpOnly; Secure"
@@ -35,6 +35,23 @@ function getRedisCookieValue(request) {
   return redisCookie ? redisCookie[1].trim() : undefined;
 }
 
+function getProxyPath(request) {
+  if (hasCookie(request)) {
+    return 'retrieve';
+  } else if (hasToken(request)) {
+    return 'store';
+  }
+
+  request.return(401);
+}
+
+function parseTokenFromRedisQueryResult(request) {
+  const lines = request.responseText.split('\r\n');
+  if (lines.length > 0) {
+    return lines[lines.length - 1];
+  }
+}
+
 function hasToken(request) {
   return request.headersIn.Authorization !== undefined;
 }
@@ -44,5 +61,12 @@ function hasCookie(request) {
   return cookie !== undefined && cookie.includes(REDIS_KEY);
 }
 
-export default {REDIS_KEY, randomString, parseToken, validateRequestHeaders, getRedisCookieValue};
-
+export default {
+  REDIS_KEY, 
+  randomString, 
+  parseToken, 
+  validateRequestHeaders, 
+  getRedisCookieValue, 
+  getProxyPath,
+  parseTokenFromRedisQueryResult
+};
