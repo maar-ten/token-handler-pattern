@@ -3,7 +3,7 @@
 
 const REDIS_KEY = 'redis_key';
 
-// create a random 128bit hexadecimal string
+// create a random hexadecimal string
 function randomString() {
   const array = new Uint32Array(4);
   crypto.getRandomValues(array);
